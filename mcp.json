@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "awardlanes": {
+      "type": "streamable-http",
+      "url": "https://awardlanes.com/mcp"
+    }
+  }
+}

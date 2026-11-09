@@ -1,0 +1,110 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "awardlanes",
+  "version": "1.0.0",
+  "description": "awardlanes is a read-only MCP connector for USDA food-purchase award lanes. Ask Claude, ChatGPT, Claude Code or Cursor to search lanes in your up-to-three-state territory, open an award, summarize states, find a vendor's awards, or check your trial. Every result carries a USDA source link and a matching awardlanes view. During the trial or on a paid plan it uses the full territory; after an unpaid trial it returns the same 20-lane sample shown on the web. Equipment is inferred from the commodity name when USDA does not state it.",
+  "author": {
+    "name": "Helios One Oy",
+    "email": "hello@awardlanes.com",
+    "url": "https://awardlanes.com"
+  },
+  "homepage": "https://awardlanes.com",
+  "repository": "https://github.com/Helios-One-Oy/awardlanes-mcp",
+  "keywords": [
+    "USDA",
+    "freight",
+    "award lanes",
+    "reefer",
+    "freight broker",
+    "food procurement",
+    "shippers"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "awardlanes",
+        "shortDescription": "USDA award lanes for brokers",
+        "longDescription": "awardlanes is a read-only MCP connector for USDA food-purchase award lanes. Ask Claude, ChatGPT, Claude Code or Cursor to search lanes in your up-to-three-state territory, open an award, summarize states, find a vendor's awards, or check your trial. Every result carries a USDA source link and a matching awardlanes view. During the trial or on a paid plan it uses the full territory; after an unpaid trial it returns the same 20-lane sample shown on the web. Equipment is inferred from the commodity name when USDA does not state it.",
+        "developerName": "Helios One Oy",
+        "category": "Business & Operations",
+        "capabilities": [
+          "Search award lanes",
+          "Get one USDA award",
+          "Summarize territory states",
+          "Find a vendor's awards",
+          "View my awardlanes account"
+        ],
+        "websiteURL": "https://awardlanes.com",
+        "supportURL": "https://awardlanes.com/docs/mcp#limits",
+        "privacyPolicyURL": "https://awardlanes.com/privacy",
+        "termsOfServiceURL": "https://awardlanes.com/terms",
+        "defaultPrompt": [
+          "Find reefer award lanes from Texas that are open now.",
+          "Open USDA contract 12-3J14-26-C-2036 and show every destination and source.",
+          "Summarize my Texas and California territory: lanes, deliveries not started, f.o.b. share and top vendors."
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Search lanes by state, direction and equipment",
+              "prompt": "Find reefer award lanes from Texas that are open now.",
+              "expected_behavior": "Returns up to the requested number of lanes, each with its USDA source link and an awardlanes web link; says when equipment is inferred.",
+              "tools_triggered": "search_lanes"
+            },
+            {
+              "description": "Open one award",
+              "prompt": "Open USDA contract 12-3J14-26-C-2036 and show every destination and source.",
+              "expected_behavior": "Returns that award's lanes, delivery dates, vendor and plant, USDA sources and the web view link.",
+              "tools_triggered": "get_award"
+            },
+            {
+              "description": "Summarize the territory",
+              "prompt": "Summarize my Texas and California territory: lanes, deliveries not started, f.o.b. share and top vendors.",
+              "expected_behavior": "Returns counts and top vendors for the requested states (up to three).",
+              "tools_triggered": "state_summary"
+            },
+            {
+              "description": "Find a vendor's awards",
+              "prompt": "Show USDA awards for Victor Packing, with published contact details.",
+              "expected_behavior": "Returns that vendor's awards and plant details, with a published business contact and its source when one exists.",
+              "tools_triggered": "vendor_awards"
+            },
+            {
+              "description": "Check the account",
+              "prompt": "What is my awardlanes trial status and territory?",
+              "expected_behavior": "Returns plan or trial end date, territory states and the billing link.",
+              "tools_triggered": "my_account"
+            }
+          ],
+          "negative": [
+            {
+              "description": "Write request",
+              "prompt": "Delete the Texas lanes from my awardlanes account.",
+              "expected_behavior": "Explains the connector is read-only and calls no tool."
+            },
+            {
+              "description": "Payment request",
+              "prompt": "Upgrade my awardlanes plan and charge my card.",
+              "expected_behavior": "Explains the connector takes no payments; at most points to the billing link from my_account."
+            },
+            {
+              "description": "Out of scope",
+              "prompt": "Find me a spot load on a load board for tomorrow.",
+              "expected_behavior": "Explains awardlanes covers USDA award lanes only, not spot loads, and invents nothing."
+            }
+          ]
+        },
+        "demo_recording_url": "",
+        "commerce": false,
+        "commerce_description": "This MCP connector provides data lookup and analysis only; it does not sell products or process payments."
+      },
+      "publication": {
+        "release_notes": "Initial remote Streamable HTTP MCP connector: OAuth 2.1 PKCE S256, dynamic client registration, consent signup, five read-only tools, shared web gating, hashed rotating tokens, revocation, tool-call analytics, and public docs/privacy copy. Equipment inference now prefers shelf-stable, canned and juice commodities before fruit; tool responses state when equipment is inferred, and MCP OAuth/proxy limits are bounded."
+      }
+    }
+  }
+}
