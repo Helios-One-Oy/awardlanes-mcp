@@ -6,7 +6,7 @@ Connect at `https://awardlanes.com/mcp` with OAuth 2.1, DCR, and PKCE S256:
 
 - Claude: add a custom connector using the URL above.
 - ChatGPT: add a remote MCP connector in developer mode.
-- Claude Code: `claude mcp add awardlanes https://awardlanes.com/mcp` and authenticate.
+- Claude Code: `claude mcp add --transport http awardlanes https://awardlanes.com/mcp` and authenticate.
 - Cursor: add a streamable HTTP MCP server with the URL above.
 
 Documentation: https://awardlanes.com/docs/mcp  
